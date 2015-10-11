@@ -19,37 +19,50 @@
 ;
 ;<empty>         ::= " ".
 
-(define (tokenize-letter string pointer state history)
-  (if (= state -1)
-    #f ; fail
+(define (tokenize-string string pointer state history transition-function accept?)
+  (if (fail? state)
+    #f
     (if (= pointer (string-length string))
-      history
-      (let ((transite-result (transite-letter-automaton-state (get-char string pointer) state)))
+      (if (accept? state) (list->string (reverse history)) #f)
+      (let ((transite-result (transition-function (get-char string pointer) state)))
         (push! history (car transite-result))
-        (tokenize-letter string (+ pointer 1) (cdr transite-result) history)))))
+        (tokenize-string string (+ pointer 1) (cdr transite-result) history transition-function accept?)))))
 
-(define (tokenize-number string pointer state history)
-  (if (= state -1)
-    #f ; fail
-    (if (= pointer (string-length string))
-      history
-      (let ((transite-result (transite-number-automaton-state (get-char string pointer) state)))
-        (push! history (car transite-result))
-        (tokenize-number string (+ pointer 1) (cdr transite-result) history)))))
+(define (tokenize-letter string)
+  (tokenize-string string 0 0 (list) transite-letter-automaton
+    (lambda (state) (= state 1))))
 
-(define (transite-letter-automaton-state char state)
+(define (tokenize-number string)
+  (tokenize-string string 0 0 (list) transite-number-automaton
+    (lambda (state) (= state 1))))
+
+;(define (tokenize-operator string)
+;  (tokenize-string string 0 0 (list) transite-number-automaton
+;    (lambda (state) (= state 1))))
+
+(define (transite-letter-automaton char state)
   (cond ((= state 0)
           (if (alphabet? char) (cons char 1) fail))
         ((= state 1)
           (if (alphabet? char) (cons char 1) fail))
         (else fail)))
 
-(define (transite-number-automaton-state char state)
+(define (transite-number-automaton char state)
   (cond ((= state 0)
           (if (one-to-nine? char) (cons char 1) fail))
         ((= state 1)
           (if (zero-to-nine? char) (cons char 1) fail))
         (else fail)))
+
+;(define (transite-operator-automaton char state)
+;  (cond ((= state 0)
+;          (cond ((char=? char #\+) (cons char 1))
+;                ((char=? char #\-) (cons char 1))
+;                ((char=? char #\/) (cons char 1))
+;                ((char=? char #\*) (cons char 1)))
+;        ((= state 1)
+;          (if (zero-to-nine? char) (cons char 1) fail))
+;        (else fail))))
 
 (define (alphabet? char)
   (or (char=? char #\a)
@@ -98,8 +111,8 @@
   (string-ref string pointer) )
 
 (define fail (cons "" -1))
-(define (fail? result) (= (cdr result) -1))
+(define (fail? state) (= state -1))
 
-(print (tokenize-letter "abc" 0 0 (list))) ; success. return history
-(print (tokenize-number "10" 0 0 (list))) ; success. return history
-(print (tokenize-number "010" 0 0 (list))) ; fail
+(print (tokenize-letter "abcxz")) ; success. return history
+(print (tokenize-number "10")) ; success. return history
+;(print (tokenize "(+ 1 1)")) ; fail
