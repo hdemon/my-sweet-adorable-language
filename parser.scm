@@ -24,7 +24,7 @@
     #f
     (if (= pointer (string-length string))
       history
-      (let ((transite-result (transite-letter-automaton-state string pointer state history)))
+      (let ((transite-result (transite-letter-automaton-state string pointer state)))
         (push! history (car transite-result))
         (tokenize-letter string (+ pointer 1) (cdr transite-result) history)))))
 
@@ -33,11 +33,11 @@
     #f
     (if (= pointer (string-length string))
       history
-      (let ((transite-result (transite-number-automaton-state string pointer state history)))
+      (let ((transite-result (transite-number-automaton-state string pointer state)))
         (push! history (car transite-result))
         (tokenize-number string (+ pointer 1) (cdr transite-result) history)))))
 
-(define (transite-letter-automaton-state string pointer state history)
+(define (transite-letter-automaton-state string pointer state)
   (let ((char (get-char string pointer)))
     (cond ((= state 0)
             (if (alphabet? char) (cons char 1) fail))
@@ -45,7 +45,7 @@
             (if (alphabet? char) (cons char 1) fail))
           (else fail))))
 
-(define (transite-number-automaton-state string pointer state history)
+(define (transite-number-automaton-state string pointer state)
   (let ((char (get-char string pointer)))
     (cond ((= state 0)
             (if (one-to-nine? char) (cons char 1) fail))
