@@ -3,3 +3,8 @@
         (cons (list ()   1           () ) #f)
         (cons (list 1    1           2  ) #t)
         (cons (list 2    2           () ) #t)))
+
+(define (state-transition-table-of-bracket)
+  (list       (list bracket)
+        (cons (list 1      ) #f)
+        (cons (list ()     ) #t)))

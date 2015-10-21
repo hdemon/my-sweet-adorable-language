@@ -12,3 +12,6 @@
 
 (define (real-number-dfa current-state input)
   (dfa current-state input state-transition-table-of-real-number))
+
+(define (bracket-dfa current-state input)
+  (dfa current-state input state-transition-table-of-bracket))

@@ -7,6 +7,9 @@
 (define dot
   (list #\.))
 
+(define bracket
+  (list #\( #\)))
+
 (define one-to-nine
   (list #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9))
 
@@ -26,6 +29,9 @@
 
 (define (real-number-dfa current-state input)
   (dfa current-state input state-transition-table-of-real-number))
+
+(define (bracket-dfa current-state input)
+  (dfa current-state input state-transition-table-of-bracket))
 (define (get-list-index list element)
   (if (char=? (car list) element)
     0
@@ -73,17 +79,15 @@
 ;<number>        ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" .
 ;
 ;<empty>         ::= " ".
-;(define (state-transition-table-of-real-number)
-;  (list       (list #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\.)
-;        (cons (list ()  1   1   1   1   1   1   1   1   1   () ) #f)
-;        (cons (list 1   1   1   1   1   1   1   1   1   1   2  ) #t)
-;        (cons (list 2   2   2   2   2   2   2   2   2   2   () ) #t)))
-;
 (define (state-transition-table-of-real-number)
   (list       (list zero one-to-nine dot)
         (cons (list ()   1           () ) #f)
         (cons (list 1    1           2  ) #t)
         (cons (list 2    2           () ) #t)))
-(print (real-number-dfa 0 (list #\1 #\. #\2)))
 
-(print (contain? #\f (list #\a #\b #\c #\d #\e #\r #\g)))
+(define (state-transition-table-of-bracket)
+  (list       (list bracket)
+        (cons (list 1      ) #f)
+        (cons (list ()     ) #t)))
+(print (real-number-dfa 0 (list #\1 #\. #\2)))
+(print (bracket-dfa 0 (list #\()))
