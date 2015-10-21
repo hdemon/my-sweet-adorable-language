@@ -1,0 +1,5 @@
+(define (state-transition-table-of-real-number)
+  (list       (list zero one-to-nine dot)
+        (cons (list ()   1           () ) #f)
+        (cons (list 1    1           2  ) #t)
+        (cons (list 2    2           () ) #t)))
