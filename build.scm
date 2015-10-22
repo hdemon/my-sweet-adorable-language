@@ -70,18 +70,18 @@
 ;<number>        ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" .
 ;
 ;<empty>         ::= " ".
-(define (real-number-recognizer current-state input)
-  (dfa current-state input state-transition-table-of-real-number))
+(define (real-number-recognizer input)
+  (dfa 0 input state-transition-table-of-real-number))
 
-(define (bracket-recognizer current-state input)
-  (dfa current-state input state-transition-table-of-bracket))
+(define (bracket-recognizer input)
+  (dfa 0 input state-transition-table-of-bracket))
 (define (state-transition-table-of-real-number)
   (list       (list zero one-to-nine dot)
         (cons (list ()   1           () ) #f)
         (cons (list 1    1           2  ) #t)
         (cons (list 2    2           () ) #t)))
-(print (boolean=? (real-number-recognizer 0 (list #\1 #\0)) #t))
-(print (boolean=? (real-number-recognizer 0 (list #\0 #\1)) #f))
-(print (boolean=? (real-number-recognizer 0 (list #\1 #\. #\2)) #t))
-(print (boolean=? (real-number-recognizer 0 (list #\1 #\. #\.)) #f))
-(print (boolean=? (real-number-recognizer 0 (list #\. #\1)) #f))
+(print (boolean=? (real-number-recognizer (list #\1 #\0)) #t))
+(print (boolean=? (real-number-recognizer (list #\0 #\1)) #f))
+(print (boolean=? (real-number-recognizer (list #\1 #\. #\2)) #t))
+(print (boolean=? (real-number-recognizer (list #\1 #\. #\.)) #f))
+(print (boolean=? (real-number-recognizer (list #\. #\1)) #f))
