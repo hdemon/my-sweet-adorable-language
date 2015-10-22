@@ -23,9 +23,6 @@
       (if (null? (cdr input))
         (cdr (nth (state-transition-table) (+ 1 next-state)))
         (dfa next-state (cdr input) state-transition-table)))))
-
-(define (real-number-dfa current-state input)
-  (dfa current-state input state-transition-table-of-real-number))
 (define (get-list-index list element)
   (if (char=? (car list) element)
     0
@@ -73,17 +70,18 @@
 ;<number>        ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" .
 ;
 ;<empty>         ::= " ".
-;(define (state-transition-table-of-real-number)
-;  (list       (list #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\.)
-;        (cons (list ()  1   1   1   1   1   1   1   1   1   () ) #f)
-;        (cons (list 1   1   1   1   1   1   1   1   1   1   2  ) #t)
-;        (cons (list 2   2   2   2   2   2   2   2   2   2   () ) #t)))
-;
+(define (real-number-recognizer current-state input)
+  (dfa current-state input state-transition-table-of-real-number))
+
+(define (bracket-recognizer current-state input)
+  (dfa current-state input state-transition-table-of-bracket))
 (define (state-transition-table-of-real-number)
   (list       (list zero one-to-nine dot)
         (cons (list ()   1           () ) #f)
         (cons (list 1    1           2  ) #t)
         (cons (list 2    2           () ) #t)))
-(print (real-number-dfa 0 (list #\1 #\. #\2)))
-
-(print (contain? #\f (list #\a #\b #\c #\d #\e #\r #\g)))
+(print (boolean=? (real-number-recognizer 0 (list #\1 #\0)) #t))
+(print (boolean=? (real-number-recognizer 0 (list #\0 #\1)) #f))
+(print (boolean=? (real-number-recognizer 0 (list #\1 #\. #\2)) #t))
+(print (boolean=? (real-number-recognizer 0 (list #\1 #\. #\.)) #f))
+(print (boolean=? (real-number-recognizer 0 (list #\. #\1)) #f))

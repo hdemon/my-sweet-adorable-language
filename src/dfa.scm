@@ -9,6 +9,3 @@
       (if (null? (cdr input))
         (cdr (nth (state-transition-table) (+ 1 next-state)))
         (dfa next-state (cdr input) state-transition-table)))))
-
-(define (real-number-dfa current-state input)
-  (dfa current-state input state-transition-table-of-real-number))
