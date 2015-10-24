@@ -1,0 +1,5 @@
+(print (equal? (real-number-recognizer (list #\1 #\0)) (list #\1 #\0)))
+(print (equal? (real-number-recognizer (list #\0 #\1)) (list #\0)))
+(print (equal? (real-number-recognizer (list #\1 #\. #\2)) (list #\1 #\. #\2)))
+(print (equal? (real-number-recognizer (list #\1 #\. #\.)) (list #\1)))
+(print (equal? (real-number-recognizer (list #\. #\1)) ()))

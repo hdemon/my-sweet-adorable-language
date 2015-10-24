@@ -26,12 +26,6 @@
       (if (null? (cdr input))
         (cdr (nth (state-transition-table) (+ 1 next-state)))
         (dfa next-state (cdr input) state-transition-table)))))
-
-(define (real-number-dfa current-state input)
-  (dfa current-state input state-transition-table-of-real-number))
-
-(define (bracket-dfa current-state input)
-  (dfa current-state input state-transition-table-of-bracket))
 (define (get-list-index list element)
   (if (char=? (car list) element)
     0
@@ -79,15 +73,42 @@
 ;<number>        ::= "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "0" .
 ;
 ;<empty>         ::= " ".
+(define (real-number-recognizer input)
+  (match 0 input state-transition-table-of-real-number))
+
+(define (bracket-recognizer input)
+  (match 0 input state-transition-table-of-bracket))
 (define (state-transition-table-of-real-number)
   (list       (list zero one-to-nine dot)
-        (cons (list ()   1           () ) #f)
-        (cons (list 1    1           2  ) #t)
-        (cons (list 2    2           () ) #t)))
+        (cons (list 2    1           () ) #f)
+        (cons (list 1    1           4  ) #t)
+        (cons (list ()   ()          4  ) #t)
+        (cons (list 3    3           () ) #t)
+        (cons (list 5    5           () ) #f)
+        (cons (list 5    5           () ) #t)))
 
 (define (state-transition-table-of-bracket)
   (list       (list bracket)
         (cons (list 1      ) #f)
         (cons (list ()     ) #t)))
-(print (real-number-dfa 0 (list #\1 #\. #\2)))
-(print (bracket-dfa 0 (list #\()))
+(define (match current-state input state-transition-table)
+  (let ((matched (list)))
+    (define (recurse current-state input index accepted-index)
+      (let ((next-state (get-next-state state-transition-table current-state (car input))))
+        (if (null? next-state)
+          (take (reverse matched) accepted-index)
+          (begin
+            (push! matched (car input))
+            (if (null? (cdr input))
+              (take (reverse matched) (+ index 1))
+              (recurse next-state (cdr input) (+ index 1) (if (accept? state-transition-table next-state) (+ index 1) accepted-index) ))))))
+    (recurse current-state input 0 0)))
+
+(define (accept? state-transition-table state)
+  (cdr (nth (state-transition-table) (+ 1 state))))
+(print (equal? (real-number-recognizer (list #\1 #\0)) (list #\1 #\0)))
+(print (equal? (real-number-recognizer (list #\0 #\1)) (list #\0)))
+(print (equal? (real-number-recognizer (list #\1 #\. #\2)) (list #\1 #\. #\2)))
+(print (equal? (real-number-recognizer (list #\1 #\. #\.)) (list #\1)))
+(print (equal? (real-number-recognizer (list #\. #\1)) ()))
+;(print (tokenizer "(1)"))
