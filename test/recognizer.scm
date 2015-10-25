@@ -3,6 +3,11 @@
 (print (equal? (real-number-recognizer (list #\1 #\. #\2)) (list #\1 #\. #\2)))
 (print (equal? (real-number-recognizer (list #\1 #\. #\.)) (list #\1)))
 (print (equal? (real-number-recognizer (list #\. #\1)) ()))
+(print (equal? (real-number-recognizer (list #\a #\b)) ()))
+
+(print (equal? (bracket-recognizer (list #\()) (list #\()))
+(print (equal? (bracket-recognizer (list #\))) (list #\))))
+(print (equal? (bracket-recognizer (list #\( #\))) (list #\()))
 
 (print (equal? (identifier-recognizer (list #\a #\b)) (list #\a #\b)))
 (print (equal? (identifier-recognizer (list #\0 #\a #\b)) ()))
