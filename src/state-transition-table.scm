@@ -11,3 +11,10 @@
   (list       (list bracket)
         (cons (list 1      ) #f)
         (cons (list ()     ) #t)))
+
+(define (state-transition-table-of-identifier) ; http://regexper.com/#%5Ba-zA-Z_%5D%2B(%5C%3F%7C%5C!)%3F
+  (list       (list (append alphabet underscore) question exclamation)
+        (cons (list 1                            ()       ()         ) #f)    ; start
+        (cons (list 1                            2        3          ) #t)    ; alphabet or underscore
+        (cons (list ()                           ()       ()         ) #t)    ; question
+        (cons (list ()                           ()       ()         ) #t)))  ; exclamation
