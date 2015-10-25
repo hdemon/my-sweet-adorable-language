@@ -7,12 +7,14 @@
         (+ 1 result)))))
 
 (define (get-list-index-contains-list list element)
-  (if (contain? element (car list))
+  (if (null? list)
     0
-    (let ((result (get-list-index-contains-list (cdr list) element)))
-      (if (= result -1)
-        -1
-        (+ 1 result)))))
+    (if (contain? element (car list))
+      0
+      (let ((result (get-list-index-contains-list (cdr list) element)))
+        (if (= result -1)
+          -1
+          (+ 1 result))))))
 
 (define (contain? char char-list)
   (if (null? char-list)
@@ -22,6 +24,8 @@
       (contain? char (cdr char-list)))))
 
 (define (nth list number)
-  (if (= number 0)
-      (car list)
-      (nth (cdr list) (- number 1)) ))
+  (if (null? list)
+    ()
+    (if (= number 0)
+        (car list)
+        (nth (cdr list) (- number 1)))))
