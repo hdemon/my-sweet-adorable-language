@@ -13,3 +13,9 @@
 
 (define (accept? state-transition-table state)
   (cdr (nth (state-transition-table) (+ 1 state))))
+
+(define (tokenize string)
+  (let ((string-list (string->list string)))
+    (real-number-recognizer string-list)
+    (bracket-recognizer string-list)
+    (identifier-recognizer string-list)))
