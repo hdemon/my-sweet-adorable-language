@@ -1,8 +1,8 @@
 (define (real-number-recognizer input)
-  (match 0 input state-transition-table-of-real-number))
+  (dfa state-transition-table-of-real-number input))
 
 (define (bracket-recognizer input)
-  (match 0 input state-transition-table-of-bracket))
+  (dfa state-transition-table-of-bracket input))
 
 (define (identifier-recognizer input)
-  (match 0 input state-transition-table-of-identifier))
+  (dfa state-transition-table-of-identifier input))
