@@ -19,4 +19,4 @@
     (recurse current-state input 0 0)))
 
 (define (dfa state-transition-table input)
-  (match 0 input state-transition-table))
+  (equal? (match 0 input state-transition-table) input))
