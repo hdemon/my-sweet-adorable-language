@@ -16,6 +16,6 @@
 
 (define (tokenize string)
   (let ((string-list (string->list string)))
-    (real-number-recognizer string-list)
-    (bracket-recognizer string-list)
-    (identifier-recognizer string-list)))
+    (real-number? string-list)
+    (bracket? string-list)
+    (identifier? string-list)))
