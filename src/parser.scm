@@ -1,3 +1,15 @@
+(define (parse string)
+  (_parse (append (string->list string) (list #\$)) 1 1 ()))
+
+(define (_parse string-list cursor-start cursor-end token-list)
+  (if (and (> cursor-start (length string-list)) (> cursor-end (length string-list)))
+    token-list
+    (if (<= cursor-end (length string-list))
+      (if (real-number? (between string-list cursor-start cursor-end))
+        (_parse string-list cursor-start (+ cursor-end 1) token-list)
+        (_parse string-list (+ cursor-end 1) (+ cursor-end 1) (append token-list (list "real" (between string-list cursor-start (- cursor-end 1))))))
+      token-list)))
+
 ;<s_expression>  ::= <atomic_symbol>
 ;                  | "(" <s_expression> "." <s_expression> ")"
 ;                  | <list> .
