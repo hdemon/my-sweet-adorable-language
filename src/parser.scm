@@ -6,8 +6,10 @@
     token-list
     (if (<= cursor-end (length string-list))
       (if (real-number? (between string-list cursor-start cursor-end))
+        (if (real-number? (between string-list cursor-start (+ cursor-end 1)))
+          (_parse string-list cursor-start (+ cursor-end 1) token-list)
+          (append token-list (list "real" (list->string (between string-list cursor-start cursor-end))))
         (_parse string-list cursor-start (+ cursor-end 1) token-list)
-        (_parse string-list (+ cursor-end 1) (+ cursor-end 1) (append token-list (list "real" (between string-list cursor-start (- cursor-end 1))))))
       token-list)))
 
 ;<s_expression>  ::= <atomic_symbol>
